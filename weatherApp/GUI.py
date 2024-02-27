@@ -1,13 +1,13 @@
 from tkinter import *
 import tkinter as tk
-from geopy.geocoders import Nominatim
+# from geopy.geocoders import Nominatim
 from tkinter import ttk,messagebox
 from datetime import *
 import requests
-import pytz
+# import pytz
 from PIL import Image, ImageTk
 from apiWeather import getWeather
-
+from utils import get_current_local
 class weatherApp():
     def __init__(self, window, KEY_API):
         self.key_api= KEY_API
@@ -78,7 +78,7 @@ class weatherApp():
     def search_bar(self):
         self.textfield = tk.Entry(self.window, width=15, font=("poppins", 25, "bold"), bg="white", border=0, fg="black")
         self.textfield.place(x=280, y=10)
-        self.textfield.insert(0, "HoChiMinh")
+        self.textfield.insert(0, get_current_local())
 
         self.search_icon = PhotoImage(file="shapes/search.png")
         self.sear_icon = Button(image=self.search_icon, borderwidth=0, cursor="hand2", bg="#57adff", command=self.setWeather)
