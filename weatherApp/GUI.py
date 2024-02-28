@@ -72,6 +72,12 @@ class weatherApp():
         self.v = Label(self.window, font=("Times New Roman", 11), fg="white", bg="#4169E1")
         self.v.place(x=570, y=330)
 
+        self.timezone_label.config(text=".../.....")
+        self.t.config(text="... °C")
+        self.h.config(text="... %")
+        self.p.config(text="... mb")
+        self.w.config(text="... km/h")
+        self.v.config(text="... km")
     def create_bg(self):
         rec = tk.Canvas(self.window, width=500, height=250, bg="#4169E1")  
         rec.place(relx=0.5, rely=0.5, anchor="center")
@@ -79,6 +85,7 @@ class weatherApp():
     def search_bar(self):
         self.textfield = tk.Entry(self.window, width=15, font=("poppins", 25, "bold"), bg="white", border=0, fg="black")
         self.textfield.place(x=280, y=10)
+        self.textfield.insert(0, "Loading...")
         t1 = Thread(target=self.thread_get_current_local, args=(self, ))
         t1.start()
 
@@ -88,6 +95,7 @@ class weatherApp():
     
     def thread_get_current_local(self, app_instance):
         city = get_current_local()
+        app_instance.textfield.delete(0, END)
         app_instance.textfield.insert(0, city)
         self.set_weather(app_instance)
 
