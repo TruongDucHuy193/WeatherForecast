@@ -3,10 +3,11 @@ import tkinter as tk
 # from geopy.geocoders import Nominatim
 from tkinter import ttk,messagebox
 from datetime import *
+from threading import *
 import requests
 # import pytz
 from PIL import Image, ImageTk
-from apiWeather import getWeather
+from apiWeather import get_weather
 from utils import get_current_local
 class weatherApp():
     def __init__(self, window, KEY_API):
@@ -78,21 +79,31 @@ class weatherApp():
     def search_bar(self):
         self.textfield = tk.Entry(self.window, width=15, font=("poppins", 25, "bold"), bg="white", border=0, fg="black")
         self.textfield.place(x=280, y=10)
-        self.textfield.insert(0, get_current_local())
+        t1 = Thread(target=self.thread_get_current_local, args=(self, ))
+        t1.start()
 
         self.search_icon = PhotoImage(file="shapes/search.png")
-        self.sear_icon = Button(image=self.search_icon, borderwidth=0, cursor="hand2", bg="#57adff", command=self.setWeather)
+        self.sear_icon = Button(image=self.search_icon, borderwidth=0, cursor="hand2", bg="#57adff", command=self.thread_set_weather)
         self.sear_icon.place(x=550, y=1)
     
-    def setWeather(self):
-        city = self.textfield.get()
-        temp,humidity,pressure,wind,visibility, timezone_result = getWeather(self.key_api, city)
-        self.timezone_label.config(text=timezone_result)
-        self.t.config(text=f"{temp} °C")
-        self.h.config(text=f"{humidity} %")
-        self.p.config(text=f"{pressure} mb")
-        self.w.config(text=f"{wind} km/h")
-        self.v.config(text=f"{visibility} km")
+    def thread_get_current_local(self, app_instance):
+        city = get_current_local()
+        app_instance.textfield.insert(0, city)
+        self.set_weather(app_instance)
+
+    def thread_set_weather(self):
+        t1 = Thread(target=(self.set_weather) , args=(self, ))
+        t1.start()
+
+    def set_weather(self, app_instance):
+        city = app_instance.textfield.get()
+        temp,humidity,pressure,wind,visibility, timezone_result = get_weather(self.key_api, city)
+        app_instance.timezone_label.config(text=timezone_result)
+        app_instance.t.config(text=f"{temp} °C")
+        app_instance.h.config(text=f"{humidity} %")
+        app_instance.p.config(text=f"{pressure} mb")
+        app_instance.w.config(text=f"{wind} km/h")
+        app_instance.v.config(text=f"{visibility} km")
 
     def set_iconweather(self):
         current_time = datetime.now().hour
