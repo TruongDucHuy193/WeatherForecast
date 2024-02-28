@@ -5,5 +5,5 @@ def get_current_local():
     g = geocoder.ip('me')
     lat, lng = g.latlng
     location = geocoder.osm([lat, lng], method='reverse')
-    district = location.raw['address']['suburb'].replace("Quận", "").replace("Huyện", "").replace("Thành phố", "").replace("Phường", "").replace("Xã", "").replace("Thị trấn", "").strip()
+    district = location.raw['address']['suburb'].split(" ", 1)[1].strip()
     return district
