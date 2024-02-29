@@ -100,18 +100,25 @@ class weatherApp():
         self.set_weather(app_instance)
 
     def thread_set_weather(self):
+        self.timezone_label.config(text=".../.....")
+        self.t.config(text="... °C")
+        self.h.config(text="... %")
+        self.p.config(text="... mb")
+        self.w.config(text="... km/h")
+        self.v.config(text="... km")
         t1 = Thread(target=(self.set_weather) , args=(self, ))
         t1.start()
 
     def set_weather(self, app_instance):
         city = app_instance.textfield.get()
-        temp,humidity,pressure,wind,visibility, timezone_result = get_weather(self.key_api, city)
+        temp,humidity,pressure,wind,visibility, description, timezone_result = get_weather(self.key_api, city)
         app_instance.timezone_label.config(text=timezone_result)
         app_instance.t.config(text=f"{temp} °C")
         app_instance.h.config(text=f"{humidity} %")
         app_instance.p.config(text=f"{pressure} mb")
         app_instance.w.config(text=f"{wind} km/h")
         app_instance.v.config(text=f"{visibility} km")
+        print(description)
 
     def set_iconweather(self):
         current_time = datetime.now().hour
