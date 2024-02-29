@@ -1,6 +1,7 @@
 from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
 from datetime import *
+from threading import *
 import requests
 import pytz
 #nhận api
@@ -10,7 +11,7 @@ def get_api():
     return api_key
 
 #lấy dữ liệu thời tiết
-def getWeather(KEY, city):
+def get_weather(key, city):
     geolocator = Nominatim(user_agent="geoapiExcercises")
     location = geolocator.geocode(city)
     obj = TimezoneFinder()
@@ -20,7 +21,7 @@ def getWeather(KEY, city):
     current_time = local_time.strftime("%I:%M %p")
 
     #đường dẫn lấy dữ liệu thời tiết
-    api = "https://api.openweathermap.org/data/3.0/onecall?lat="+str(location.latitude)+"&lon="+str(location.longitude)+"&units=metric&exclude=hourly,daily&appid="+KEY
+    api = "https://api.openweathermap.org/data/3.0/onecall?lat="+str(location.latitude)+"&lon="+str(location.longitude)+"&units=metric&exclude=hourly,daily&lang=vi&appid="+key
     json_data = requests.get(api).json()
 
     #current
@@ -29,7 +30,6 @@ def getWeather(KEY, city):
     pressure = json_data["current"]["pressure"]
     wind = json_data["current"]["wind_speed"]
     visibility = json_data["current"]["visibility"]
-    #descripption = json_data["current"]["weather"][0]["description"]
+    description = json_data["current"]["weather"][0]["description"]
     
-    return [temp,humidity,pressure,wind,visibility, timezone_result]
-    
+    return [temp,humidity,pressure,wind,visibility, description, timezone_result]
