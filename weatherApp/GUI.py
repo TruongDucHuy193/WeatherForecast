@@ -3,12 +3,14 @@ import tkinter as tk
 # from geopy.geocoders import Nominatim
 from tkinter import ttk,messagebox
 from datetime import *
+from datetime import datetime
 from threading import *
 import requests
 # import pytz
 from PIL import Image, ImageTk
 from apiWeather import get_weather
 from utils import get_current_local
+
 class weatherApp():
     def __init__(self, window, KEY_API):
         self.key_api= KEY_API
@@ -20,7 +22,6 @@ class weatherApp():
         self.create_labels()
         self.search_bar()
         self.create_bg()
-        self.set_iconweather()
         self.thpwv()
 
     def create_window(self):
@@ -78,6 +79,7 @@ class weatherApp():
         self.p.config(text="... mb")
         self.w.config(text="... km/h")
         self.v.config(text="... km")
+        
     def create_bg(self):
         rec = tk.Canvas(self.window, width=500, height=250, bg="#4169E1")  
         rec.place(relx=0.5, rely=0.5, anchor="center")
@@ -121,10 +123,90 @@ class weatherApp():
         app_instance.p.config(text=f"{pressure} mb")
         app_instance.w.config(text=f"{wind} km/h")
         app_instance.v.config(text=f"{visibility} km")
+        self.set_iconweather(description)
 
-    def set_iconweather(self):
+    def set_iconweather(self, description):
         current_time = datetime.now().hour
-        if current_time >= 7 and current_time <= 13:
-            self.icon_wea = PhotoImage(file="iconWeather/01d.png")
-            Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
-    
+        gr_11d = ["thunderstorm with light rain","thunderstorm with rain","thunderstorm with heavy rain","light thunderstorm","thunderstorm","heavy thunderstorm","ragged thunderstorm","thunderstorm with light drizzle","thunderstorm with drizzle","thunderstorm with heavy drizzle"]
+        gr_9d = ["light intensity drizzle","drizzle","heavy intensity drizzle","light intensity drizzle rain","rain","heavy intensity drizzle rain","shower rain and drizzle","heavy shower rain and drizzle","shower drizzle","light intensity shower rain","shower rain","heavy intensity shower rain","ragged shower rain"]
+        gr_10d = ["light rain","moderate rain","heavy intensity rain","very heavy rain","extreme rain"]
+        gr_13d = ["light snow","snow","heavy snow","sleet","light shower sleet","shower sleet","light rain and snow","rain and snow","light shower snow","shower snow","heavy shower snow","freezing rain"]
+        gr_50d = ["mist","smoke","haze","sand/dust whirls","fog","sand","dust","volcanic ash","squalls","tornado"]
+        gr_clouds = ["broken clouds","overcast clouds"]
+        if current_time in range(6,18):
+            if description=="clear sky":
+                self.icon_wea = PhotoImage(file="iconWeather/01d.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+            
+            elif description=="few clouds":
+                self.icon_wea = PhotoImage(file="iconWeather/02d.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+            elif description=="scattered clouds":
+                self.icon_wea = PhotoImage(file="iconWeather/03d.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+            
+            elif description in list(gr_clouds):
+                self.icon_wea = PhotoImage(file="iconWeather/04d.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+            elif description in list(gr_9d):
+                self.icon_wea = PhotoImage(file="iconWeather/09d.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+            elif description in list(gr_10d):
+                self.icon_wea = PhotoImage(file="iconWeather/10d.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+
+            elif description in list(gr_11d):
+                self.icon_wea = PhotoImage(file="iconWeather/11d.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+            elif description in list(gr_13d):
+                self.icon_wea = PhotoImage(file="iconWeather/13d.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+
+            elif description in list(gr_50d):
+                self.icon_wea = PhotoImage(file="iconWeather/50d.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+        else:
+            if description=="clear sky":
+                self.icon_wea = PhotoImage(file="iconWeather/01n.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+            
+            elif description=="few clouds":
+                self.icon_wea = PhotoImage(file="iconWeather/02n.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+            elif description=="scattered clouds":
+                self.icon_wea = PhotoImage(file="iconWeather/03n.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+            
+            elif description in list(gr_clouds):
+                self.icon_wea = PhotoImage(file="iconWeather/04n.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+            elif description=="shower rain":
+                self.icon_wea = PhotoImage(file="iconWeather/09n.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+            elif description=="rain":
+                self.icon_wea = PhotoImage(file="iconWeather/10n.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+
+            elif description=="thunderstorm":
+                self.icon_wea = PhotoImage(file="iconWeather/11n.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+            elif description=="snow":
+                self.icon_wea = PhotoImage(file="iconWeather/13n.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)
+
+
+            elif description=="mist":
+                self.icon_wea = PhotoImage(file="iconWeather/50n.png")
+                Label(self.window, image=self.icon_wea, bg="#4169E1").place(x=180, y=130)

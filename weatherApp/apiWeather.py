@@ -5,13 +5,12 @@ from threading import *
 import requests
 import pytz
 
-
+#nhận api
 def get_api():
     with open("weatherApp/apiKey.txt",'r') as api_file:
         api_key = api_file.read().strip()
     return api_key
 
-#lấy dữ liệu thời tiết
 def get_weather(key, city):
     geolocator = Nominatim(user_agent="geoapiExcercises")
     location = geolocator.geocode(city)
@@ -24,7 +23,7 @@ def get_weather(key, city):
     times = local_time.strftime("%H:%M")
 
     #đường dẫn lấy dữ liệu thời tiết
-    api = f"https://api.openweathermap.org/data/2.5/weather?lat={location.latitude}&lon={location.longitude}&units=metric&lang=vi&appid={key}"
+    api = f"https://api.openweathermap.org/data/2.5/weather?lat={location.latitude}&lon={location.longitude}&units=metric&lang=en&appid={key}"
     json_data = requests.get(api).json()
 
     #current
@@ -37,7 +36,7 @@ def get_weather(key, city):
     visibility = json_data["visibility"]
     description = json_data["weather"][0]["description"]
     
-    json = [(temp, temp_max, temp_min, humidity, pressure, wind, visibility, description, timezone_result),
+    json = [(temp, temp_max, temp_min, humidity, pressure, wind, visibility/1000, description, timezone_result),
             (week_day, day, times)],
     return json
 
@@ -46,7 +45,7 @@ def get_weather_4days_hourly(key, city):
     location = geolocator.geocode(city)
     
     #đường dẫn lấy dữ liệu thời tiết
-    api = f"https://pro.openweathermap.org/data/2.5/forecast/hourly?lat={location.latitude}&lon={location.longitude}&units=metric&lang=vi&appid={key}"
+    api = f"https://pro.openweathermap.org/data/2.5/forecast/hourly?lat={location.latitude}&lon={location.longitude}&units=metric&lang=en&appid={key}"
     json_data = requests.get(api).json()
 
 def get_weather_7days(key, city):
@@ -54,7 +53,7 @@ def get_weather_7days(key, city):
     location = geolocator.geocode(city)
 
     #đường dẫn lấy dữ liệu thời tiết
-    api = f"api.openweathermap.org/data/2.5/forecast/daily?lat={location.latitude}&lon={location.longitude}&cnt=7&units=metric&lang=vi&appid={key}"
+    api = f"api.openweathermap.org/data/2.5/forecast/daily?lat={location.latitude}&lon={location.longitude}&cnt=7&units=metric&lang=en&appid={key}"
     json_data = requests.get(api).json()["list"]
     day_current = json_data[0]
     day1 = json_data[1]
@@ -63,4 +62,3 @@ def get_weather_7days(key, city):
     day4 = json_data[4]
     day5 = json_data[5]
     day6 = json_data[6]
-
