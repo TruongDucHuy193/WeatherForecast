@@ -23,7 +23,7 @@ def get_weather(key, city):
     times = local_time.strftime("%H:%M")
 
     #đường dẫn lấy dữ liệu thời tiết
-    api = f"https://api.openweathermap.org/data/2.5/weather?lat={location.latitude}&lon={location.longitude}&units=metric&lang=vi&appid={key}"
+    api = f"https://api.openweathermap.org/data/2.5/weather?lat={location.latitude}&lon={location.longitude}&units=metric&lang=en&appid={key}"
     json_data = requests.get(api).json()
 
     #current
@@ -45,7 +45,7 @@ def get_weather_4days_hourly(key, city):
     location = geolocator.geocode(city)
     
     #đường dẫn lấy dữ liệu thời tiết
-    api = f"https://pro.openweathermap.org/data/2.5/forecast/hourly?lat={location.latitude}&lon={location.longitude}&units=metric&lang=vi&appid={key}"
+    api = f"https://pro.openweathermap.org/data/2.5/forecast/hourly?lat={location.latitude}&lon={location.longitude}&units=metric&lang=en&appid={key}"
     json_data = requests.get(api).json()
 
 def get_weather_7days(key, city):
@@ -53,7 +53,7 @@ def get_weather_7days(key, city):
     location = geolocator.geocode(city)
 
     #đường dẫn lấy dữ liệu thời tiết
-    api = f"api.openweathermap.org/data/2.5/forecast/daily?lat={location.latitude}&lon={location.longitude}&cnt=7&units=metric&lang=vi&appid={key}"
+    api = f"api.openweathermap.org/data/2.5/forecast/daily?lat={location.latitude}&lon={location.longitude}&cnt=7&units=metric&lang=en&appid={key}"
     json_data = requests.get(api).json()["list"]
     day_current = json_data[0]
     day1 = json_data[1]
