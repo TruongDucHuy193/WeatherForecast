@@ -113,14 +113,16 @@ class weatherApp():
 
     def set_weather(self, app_instance):
         city = app_instance.textfield.get()
-        temp,humidity,pressure,wind,visibility, description, timezone_result = get_weather(self.key_api, city)
+        weather = get_weather(self.key_api, city)
+        temp, temp_max, temp_min, humidity, pressure, wind, visibility, description, timezone_result = weather[0][0]
+        week_day, day, times = weather[0][1]
+
         app_instance.timezone_label.config(text=timezone_result)
         app_instance.t.config(text=f"{temp} °C")
         app_instance.h.config(text=f"{humidity} %")
         app_instance.p.config(text=f"{pressure} mb")
         app_instance.w.config(text=f"{wind} km/h")
         app_instance.v.config(text=f"{visibility} km")
-        print(description)
         self.set_iconweather(description)
 
     def set_iconweather(self, description):
